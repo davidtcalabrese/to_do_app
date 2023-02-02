@@ -1,44 +1,43 @@
-import React from "react";
-import "./postItem.css";
+import React from 'react';
+import './postItem.css';
 
 const PostItem = (props) => {
+  let classes = 'post';
 
-    let classes = "post"
+  const { label, important, onToggleImportant, onChecked, check } = props;
 
+  if (important) {
+    classes = classes + ' important-item';
+  }
 
-        const {label, important, onToggleImportant, onChecked, check} = props;
+  if (check) {
+    classes = classes + ' deactivated';
+  }
 
+  const checked = (e) => {
+    if (e.target.checked) {
+      onChecked();
+    } else {
+      onChecked();
+    }
+  };
 
-            if (important) {
-               classes = classes + " important-item";
-            }
-    
-            if (check) {
-    
-                classes = classes + " deactivated";
-            }
-
-
-        const checked = (e) => {
-            if (e.target.checked) {
-                onChecked();
-            } 
-            else {
-                onChecked();
-            }
-        }
-
-        return(
-                <div className={classes}>
-                    <input defaultChecked={check} onChange={checked} className="checkbox" type="checkbox"/>
-                    <span onClick={onToggleImportant} className="post-text">{label}</span>
-                </div>
-        )
-
-}
+  return (
+    <div className={classes}>
+      <input
+        defaultChecked={check}
+        onChange={checked}
+        className='checkbox'
+        type='checkbox'
+      />
+      <span onClick={onToggleImportant} className='post-text'>
+        {label}
+      </span>
+    </div>
+  );
+};
 
 export default PostItem;
-
 
 // const PostItem = (props) => {
 
@@ -52,9 +51,7 @@ export default PostItem;
 //         }
 //     }
 
-
 //         const {label, important, onToggleImportant, onChecked, check} = this.props;
-
 
 //         let classes = "post";
 
@@ -74,7 +71,7 @@ export default PostItem;
 //         const checked = (e) => {
 //             if (e.target.checked) {
 //                 onChecked();
-//             } 
+//             }
 //             else {
 //                 onChecked();
 //             }

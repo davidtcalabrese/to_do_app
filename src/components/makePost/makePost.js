@@ -1,44 +1,41 @@
-import React, { useState, useEffect } from "react";
-import "./makePost.css";
+import React, { useState, useEffect } from 'react';
+import './makePost.css';
 
 const MakePost = (props) => {
+  const [text, setText] = useState('');
 
-    const [text, setText] = useState("")
+  const onChange = (e) => {
+    setText(e.target.value);
+  };
 
+  useEffect(() => {
+    document.querySelector('.post-input').addEventListener('change', onChange);
+  });
 
-    const onChange = (e) => {
-        setText(e.target.value);
-        }
-
-    useEffect(() => {
-        document.querySelector(".post-input").addEventListener("change", onChange);
-    })
-
-    
-    const onSubmit = (e) => {
-        e.preventDefault();
-         if (text.length > 0) {
-            props.onAdd(text);
-            } else {
-            setText("");
-            }
-        setText("");
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (text.length > 0) {
+      props.onAdd(text);
+    } else {
+      setText('');
     }
+    setText('');
+  };
 
-            
+  return (
+    <form onSubmit={onSubmit} className='container'>
+      <input
+        onChange={onChange}
+        className='post-input'
+        type='text'
+        placeholder='What do you want to do?'
+        value={text}></input>
+      <button className='post-button'>Add</button>
+    </form>
+  );
+};
 
-
-        
-        return(
-            <form onSubmit={onSubmit} className="container">
-            <input onChange={onChange} className="post-input" type="text" placeholder="What do you want to do?" value={text}></input>
-            <button className="post-button">Send</button>
-            </form>
-        )
-    }
-
-    export default MakePost;
-
+export default MakePost;
 
 // import React, { Component } from "react";
 // import "./makePost.css";
@@ -70,13 +67,11 @@ const MakePost = (props) => {
 
 //             this.state.text = "";
 
-
-            
 //         }
 //     }
 
 //     render() {
-        
+
 //         return(
 //             <form onSubmit={this.onSubmit} className="container">
 //             <input onChange={this.onChange} className="post-input" type="text" placeholder="What do you want to do?" value={this.state.text}></input>
@@ -84,6 +79,5 @@ const MakePost = (props) => {
 //             </form>
 //         )
 //     }
-
 
 // }

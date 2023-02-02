@@ -1,100 +1,105 @@
-import React, {useState, } from 'react';
+import React, { useState } from 'react';
 import Header from '../components/header/header';
 import MakePost from '../components/makePost/makePost';
 import PostList from '../components/postList/postList';
 import './App.css';
 
 const App = (props) => {
+  const [data, setData] = useState([
+    { label: 'Buy some flowers!', important: true, id: 1, check: false },
+    { label: 'Read a new book', important: false, id: 2, check: false },
+    { label: 'Watch a new TV show', important: false, id: 3, check: false }
+  ]);
 
-    const [data, setData] = useState([
-          {label: "Buy some flowers!", important: true, id: 1, check: false},
-          {label: "Read a new book", important: false, id: 2, check: false},
-          {label: "Watch a new TV show", important: false, id: 3, check: false}
-    ])
+  const [filter, setFilter] = useState('all');
+  const [term, setTerm] = useState('');
 
-    const [filter, setFilter] = useState("all");
-    const [term, setTerm] = useState("");
+  let maxId = 3;
 
+  const addItem = (body) => {
+    const newItem = {
+      label: body,
+      active: false,
+      id: ++maxId
+    };
+    const newArr = [...data, newItem];
+    setData(newArr);
+  };
 
-    let maxId = 3;
+  const onToggleImportant = (id) => {
+    const index = data.findIndex((item) => item.id === id);
+    const oldItem = data[index];
+    const newItem = { ...oldItem, important: !oldItem.important };
+    const newData = [
+      ...data.slice(0, index),
+      newItem,
+      ...data.slice(index + 1)
+    ];
+    setData(newData);
+  };
 
-    const addItem = (body) => {
-            const newItem = {
-              label: body, 
-              active: false,
-              id:  ++maxId
-            }
-            const newArr = [...data, newItem];
-            setData(newArr);
+  const onChecked = (id) => {
+    const index = data.findIndex((item) => item.id === id);
+    const oldItem = data[index];
+    const newItem = { ...oldItem, check: !oldItem.check };
+    const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)];
+    setData(newArr);
+  };
+
+  const onFilter = (filter) => {
+    setFilter(filter);
+  };
+
+  const filterPost = (items, filter) => {
+    if (filter === 'important') {
+      return items.filter((item) => item.important);
+    } else {
+      return items;
     }
+  };
 
-    const onToggleImportant = (id) => {
-              const index = data.findIndex(item => item.id === id);
-              const oldItem = data[index];
-              const newItem = {...oldItem, important: !oldItem.important};
-              const newData = [...data.slice(0, index), newItem, ...data.slice(index +1)];
-              setData(newData)
-        }
+  const onSearch = (word) => {
+    setTerm(word);
+  };
 
-    const onChecked = (id) => {
-            const index = data.findIndex(item => item.id === id)
-            const oldItem = data[index];
-            const newItem = {...oldItem, check: !oldItem.check};
-            const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)];
-            setData(newArr)
-        }
+  const searchPost = (posts, word) => {
+    if (word.length === 0) {
+      return posts;
+    }
+    return posts.filter((post) => {
+      const postLabel = post.label.toLowerCase();
+      return postLabel.indexOf(word) > -1;
+    });
+  };
 
-    const onFilter = (filter) => {
-          setFilter(filter)
-        }
+  const filterdPosts = filterPost(searchPost(data, term), filter);
 
-    const filterPost = (items, filter) => {
+  searchPost(data, term);
 
-          if (filter === "important") {
-              return items.filter(item => item.important);
-          } else {
-              return items;
-          }
-        }
+  let total = data.length;
 
-    const onSearch = (word) => {
-          setTerm(word)
-        }
+  data.forEach((post) => {
+    if (post.check) {
+      total = total - 1;
+    }
+  });
 
-    const searchPost = (posts, word) => {
-          if (word.length === 0) {
-            return posts
-          }
-            return posts.filter(post => {
-              const postLabel = post.label.toLowerCase();
-              return postLabel.indexOf(word) > -1;
-            })
-        }
-
-
-      const filterdPosts = filterPost(searchPost(data, term), filter);
-
-      searchPost(data, term);
-
-      let total = data.length; 
-
-      data.forEach(post => {
-        if (post.check) {
-          total = total -1;
-        }
-      })
-
-    return (
-        <>
-          <Header onSearch={onSearch}/>
-          <MakePost onAdd={addItem}/>
-          <PostList onToggleImportant={onToggleImportant} filterState={filter} onFilter={onFilter} total={total} onChecked={onChecked} posts={filterdPosts}/>;
-        </>
-    );
-
-}
-
-
+  return (
+    <>
+      <Header onSearch={onSearch} />
+      <MakePost onAdd={addItem} />
+      <PostList
+        onToggleImportant={onToggleImportant}
+        filterState={filter}
+        onFilter={onFilter}
+        total={total}
+        onChecked={onChecked}
+        posts={filterdPosts}
+      />
+      ;
+    </>
+  );
+};
 
 export default App;
 
@@ -119,7 +124,7 @@ export default App;
 
 //       this.addItem = (body) => {
 //         const newItem = {
-//           label: body, 
+//           label: body,
 //           active: false,
 //           id:  ++this.maxId
 //         }
@@ -196,8 +201,6 @@ export default App;
 //           })
 //       }
 
-
-
 // }
 //   render() {
 
@@ -207,7 +210,7 @@ export default App;
 
 //     this.searchPost(data, term);
 
-//     let total = this.state.data.length; 
+//     let total = this.state.data.length;
 
 //     data.forEach(post => {
 //       if (post.check) {
@@ -225,7 +228,4 @@ export default App;
 
 // }
 
-
 // }
-
-
